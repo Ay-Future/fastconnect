@@ -1,0 +1,253 @@
+@use '../../../renderer/theme' as *;
+
+@mixin input() {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  color: var(--color-text);
+  appearance: none;
+  border: 1px solid var(--color-border);
+  outline: none;
+  padding: 2px 8px;
+  border-radius: 0;
+  font-size: 14px;
+  font-family: var(--font-family);
+  background: var(--color-bg-container);
+}
+
+.row {
+  padding: 0px 8px;
+  margin: 10px 0;
+  display: flex;
+  gap: 10px;
+  position: relative;
+}
+
+.item {
+  flex-grow: 1;
+  flex-basis: 0;
+  .title {
+    line-height: 1.4em;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .control {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+  }
+}
+
+.item-select {
+  &.disabled {
+    select {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+  }
+  .select {
+    position: relative;
+    width: 100%;
+    select {
+      margin: 0;
+      font-size: 14px;
+      background: var(--color-bg-container);
+      appearance: none;
+      border: 1px solid var(--color-border);
+      padding: 2px 8px;
+      padding-right: 18px;
+      outline: none;
+      color: var(--color-text);
+      border-radius: 0;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      width: 100%;
+    }
+    &:after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--color-text);
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 6px;
+      margin: auto;
+      pointer-events: none;
+    }
+  }
+}
+
+.item-number {
+  position: relative;
+  input[type='number'] {
+    @include input();
+    padding: 2px;
+    width: 100%;
+  }
+  .control {
+    height: 20px;
+  }
+  .range-value {
+    position: absolute;
+    right: 0;
+    top: 2px;
+  }
+  .range-container {
+    flex: 2;
+    position: relative;
+    top: 1px;
+    .range-track {
+      height: 4px;
+      width: 100%;
+      padding: 0;
+      position: absolute;
+      left: 0;
+      top: 4px;
+      .range-track-bar {
+        background: var(--color-border);
+        border-radius: 2px;
+        overflow: hidden;
+        width: 100%;
+        height: 4px;
+        .range-track-progress {
+          height: 100%;
+          background: var(--color-primary);
+          width: 50%;
+        }
+      }
+    }
+    input {
+      -webkit-appearance: none;
+      background: transparent;
+      height: 4px;
+      width: 100%;
+      position: relative;
+      top: -3px;
+      margin: 0 auto;
+      outline: none;
+      border-radius: 2px;
+    }
+    input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      position: relative;
+      z-index: 1;
+      width: 12px;
+      border: none;
+      height: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      background: var(--color-white);
+    }
+  }
+}
+
+:global(.platform-windows) {
+  .item-number {
+    .range-container {
+      .range-track {
+        top: 6px;
+      }
+    }
+  }
+}
+
+.item-input {
+  input {
+    @include input();
+    width: 100%;
+  }
+}
+
+.item-textarea {
+  textarea {
+    @include input();
+    resize: none;
+    width: 100%;
+  }
+}
+
+$switch-width: 52px;
+$switch-height: 28px;
+$switch-padding: 3px;
+$thumb-size: calc($switch-height - $switch-padding * 2);
+$switch-bg-off: var(--color-bg-container-darker);
+$switch-bg-on: var(--color-primary);
+$thumb-color: $color-white;
+$transition-duration: 0.3s;
+$transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+.item-checkbox {
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: $switch-width;
+    height: $switch-height;
+    margin-right: 12px;
+  }
+
+  .toggle-switch input[type='checkbox'] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $switch-bg-off;
+    border-radius: 6px;
+    transition: background-color $transition-duration $transition-easing;
+
+    &:before {
+      content: '';
+      position: absolute;
+      height: $thumb-size;
+      width: $thumb-size;
+      left: $switch-padding;
+      bottom: $switch-padding;
+      background-color: $thumb-color;
+      border-radius: 3px;
+      transition: transform $transition-duration $transition-easing;
+      box-shadow: var(--box-shadow);
+    }
+  }
+
+  input:checked + .slider {
+    background-color: $switch-bg-on;
+  }
+
+  input:checked + .slider::before {
+    transform: translateX(
+      calc($switch-width - $thumb-size - $switch-padding * 2)
+    );
+  }
+
+  .toggle-label {
+    font-size: 14px;
+    flex: 1;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+
+  .toggle-switch:hover .slider {
+    filter: brightness(0.95);
+  }
+
+  input:checked:hover + .slider {
+    filter: brightness(1.05);
+  }
+
+  .slider:active::before {
+    transform: scale(0.95) translateX(0);
+  }
+
+  input:checked + .slider:active::before {
+    transform: scale(0.95)
+      translateX(calc($switch-width - $thumb-size - $switch-padding * 2));
+  }
+}

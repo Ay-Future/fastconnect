@@ -1,0 +1,171 @@
+import { Menu, MenuItemConstructorOptions, app } from 'electron'
+import * as window from 'share/main/lib/window'
+import * as terminal from 'share/main/window/terminal'
+import * as process from 'share/main/window/process'
+import * as about from 'share/main/window/about'
+import * as avd from '../window/avd'
+import * as devices from '../window/devices'
+import isMac from 'licia/isMac'
+import { t } from 'common/util'
+import upperCase from 'licia/upperCase'
+import isWindows from 'licia/isWindows'
+import { getUserDataPath, handleEvent } from 'share/main/lib/util'
+import { isDev } from 'share/common/util'
+
+function getTemplate(): MenuItemConstructorOptions[] {
+  const hideMenu = isMac
+    ? [
+        {
+          type: 'separator',
+        },
+        {
+          label: brand(t('hideAya')),
+          role: 'hide',
+        },
+        {
+          label: t('hideOthers'),
+          role: 'hideothers',
+        },
+        {
+          label: t('showAll'),
+          role: 'unhide',
+        },
+      ]
+    : []
+
+  const aya = {
+    label: upperCase(app.name),
+    submenu: [
+      {
+          label: brand(t('aboutAya')),
+        click() {
+          about.showWin()
+        },
+      },
+      ...hideMenu,
+      {
+        type: 'separator',
+      },
+      {
+        label: brand(t('quitAya')),
+        accelerator: isMac ? 'Command+Q' : 'Ctrl+Q',
+        click() {
+          app.quit()
+        },
+      },
+    ],
+  }
+
+  const edit = {
+    label: t('edit'),
+    submenu: [
+      {
+        role: 'cut',
+        label: t('cut'),
+      },
+      {
+        role: 'copy',
+        label: t('copy'),
+      },
+      {
+        role: 'paste',
+        label: t('paste'),
+      },
+      {
+        role: 'delete',
+        label: t('delete'),
+      },
+      {
+        role: 'selectAll',
+        label: t('selectAll'),
+      },
+    ],
+  }
+
+  const tools = {
+    label: t('tools'),
+    submenu: [
+      {
+        label: t('deviceManager'),
+        click() {
+          devices.showWin()
+        },
+      },
+      {
+        label: t('avdManager'),
+        click() {
+          avd.showWin()
+        },
+      },
+      {
+        type: 'separator',
+      },
+      {
+        label: t('terminal'),
+        click() {
+          terminal.showWin()
+        },
+      },
+      {
+        label: t('processManager'),
+        click() {
+          process.showWin()
+        },
+      },
+    ],
+  }
+
+  const help: any = {
+    role: 'help',
+    label: t('help'),
+    submenu: [
+      ...(isDev()
+        ? [
+            {
+              label: t('openUserDataDir'),
+              click() {
+                shell.openPath(getUserDataPath(''))
+              },
+            },
+            {
+              label: t('debugMainProcess'),
+              click() {
+                process.debugMainProcess()
+              },
+            },
+          ]
+        : []),
+      {
+        role: 'toggledevtools',
+        label: t('toggleDevtools'),
+      },
+    ],
+  }
+
+  const template = [tools, help]
+  if (isMac) {
+    template.unshift(aya, edit)
+  } else {
+    template.unshift(aya)
+  }
+
+  return template
+}
+
+function brand(value: string) {
+  return value.replaceAll('AYA', app.name)
+}
+
+function updateMenu() {
+  Menu.setApplicationMenu(Menu.buildFromTemplate(getTemplate()))
+
+  if (isWindows) {
+    window.sendTo('main', 'refreshMenu')
+  }
+}
+
+export function init() {
+  updateMenu()
+
+  handleEvent('updateMenu', updateMenu)
+}

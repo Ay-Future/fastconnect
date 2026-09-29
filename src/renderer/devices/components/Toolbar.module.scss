@@ -1,0 +1,20 @@
+.container {
+  background: var(--color-bg-container);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+}
+
+.ip {
+  input {
+    width: 130px;
+  }
+}
+
+.port {
+  input {
+    width: 60px;
+  }
+}

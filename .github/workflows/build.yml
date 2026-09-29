@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, macos-13, ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+    - uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    - uses: android-actions/setup-android@v3
+    - if: matrix.os == 'ubuntu'
+      run: |
+        sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils
+    - run: |
+        npm i
+        npm run adb
+        npm run server
+        npm run scrcpy
+        npm run build
+        npm run pack
+      env:
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        CSC_LINK: ${{ secrets.CSC_LINK }}
+        CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.os }}
+        path: |
+          release/**/*.dmg
+          release/**/*.exe
+          release/**/*.AppImage
+          release/**/*-lates*.yml
+          !release/**/win-unpacked/

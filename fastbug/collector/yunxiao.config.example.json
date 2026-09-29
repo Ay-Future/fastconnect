@@ -1,0 +1,12 @@
+{
+  "domain": "openapi-rdc.aliyuncs.com",
+  "edition": "center",
+  "organizationId": "<中心版必填；Region 版留空>",
+  "spaceId": "<云效项目空间 ID>",
+  "workitemTypeId": "<缺陷工作项类型 ID>",
+  "assignedTo": "<默认负责人 userId>",
+  "defaults": {
+    "verifierId": "<固定验证者 userId；留空则由草稿填写>",
+    "participantIds": ["<固定参与者 userId；留空则由草稿填写>"]
+  }
+}

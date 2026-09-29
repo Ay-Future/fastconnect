@@ -1,0 +1,93 @@
+@use '../../../theme' as *;
+
+.container {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  background: var(--color-bg-container-darker);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: #{$margin-s-m}px;
+  padding: #{$padding-s-m}px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-container);
+}
+
+.form {
+  display: grid;
+  grid-template-columns:
+    minmax(180px, 1fr)
+    minmax(220px, 1.4fr)
+    110px
+    160px
+    180px
+    auto
+    auto
+    auto
+    auto;
+  gap: #{$margin-s-m}px;
+}
+
+.input {
+  min-width: 0;
+  height: 40px;
+  padding: 0 #{$padding-s-m}px;
+  border: 1px solid var(--color-border);
+  border-radius: #{$border-radius-s-m}px;
+  background: var(--color-bg-base);
+  color: var(--color-text);
+  font-family: $font-family-code;
+  font-size: 13px;
+  outline: none;
+
+  &:focus {
+    border-color: var(--color-primary-border-hover);
+  }
+}
+
+.primary-button,
+.secondary-button {
+  height: 40px;
+  padding: 0 #{$padding-m-d}px;
+  border-radius: #{$border-radius-s-m}px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.primary-button {
+  border: 1px solid var(--color-primary-border);
+  background: var(--color-primary-bg);
+  color: var(--color-primary-active);
+}
+
+.secondary-button {
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-base);
+  color: var(--color-text);
+}
+
+.hint {
+  color: var(--color-text-secondary);
+  font-size: #{$font-size-s-m}px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.term-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+@media (max-width: 1100px) {
+  .form {
+    grid-template-columns: 1fr 1fr;
+  }
+}

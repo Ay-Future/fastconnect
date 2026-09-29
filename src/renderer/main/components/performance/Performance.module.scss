@@ -1,0 +1,146 @@
+@use '../../../theme' as *;
+
+.charts {
+  padding: 0 #{$padding-x-x-s}px;
+}
+
+.cpu-container {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.app-memory {
+  min-height: 170px;
+  margin: #{$margin-x-s}px 0;
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  background: var(--color-bg-container);
+  overflow: hidden;
+}
+
+.app-memory-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: #{$margin-x-s}px;
+  border-bottom: 1px solid var(--color-border);
+  padding: #{$padding-x-s}px 12px;
+}
+
+.app-memory-header h3 {
+  margin: 0;
+  font-size: #{$font-size-s-m}px;
+}
+
+.app-memory-header span {
+  color: var(--color-text-weak);
+  font-size: 11px;
+}
+
+.app-memory-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: #{$margin-x-s}px;
+  max-height: 240px;
+  overflow: auto;
+  padding: #{$padding-x-s}px;
+}
+
+.app-memory-item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: #{$margin-x-s}px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: #{$padding-x-s}px 12px;
+}
+
+.app-memory-item div {
+  min-width: 0;
+}
+
+.app-memory-item strong,
+.app-memory-item small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-memory-item strong {
+  font-size: #{$font-size-s-m}px;
+}
+
+.app-memory-item small {
+  margin-top: 3px;
+  color: var(--color-text-weak);
+  font-size: 11px;
+}
+
+.app-memory-item > b {
+  flex: 0 0 auto;
+  color: var(--color-primary);
+  font-size: #{$font-size-s-m}px;
+}
+
+.app-memory-empty {
+  display: grid;
+  grid-column: 1 / -1;
+  min-height: 110px;
+  place-items: center;
+  color: var(--color-text-weak);
+  font-size: #{$font-size-s-m}px;
+}
+
+.battery-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 #{$padding-x-s}px;
+}
+
+.battery-level,
+.battery-info {
+  font-size: #{$font-size-s-m}px;
+  margin-right: #{$margin-x-x-s}px;
+}
+
+.battery {
+  display: inline-block;
+  position: relative;
+  width: 23px;
+  height: 10px;
+  padding: 1px;
+  border: 1px solid var(--color-text);
+  border-radius: 2px;
+  vertical-align: middle;
+  font-size: 0;
+}
+
+.battery-head {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  margin-top: -2px;
+  margin-left: 2px;
+  width: 2px;
+  height: 4px;
+  border-radius: 0 2px 2px 0;
+  background: var(--color-text);
+}
+
+.battery-inside {
+  width: 50%;
+  height: 100%;
+  background: var(--color-text);
+  border-radius: 1px;
+  display: inline-block;
+}
+
+@media (max-width: 900px) {
+  .app-memory-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

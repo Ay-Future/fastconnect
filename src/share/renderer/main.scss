@@ -1,0 +1,230 @@
+@use '../../renderer/theme' as *;
+@use './mixin' as *;
+@use 'sass:color';
+@use 'sass:list';
+
+$base-theme-vars: (
+  color-text,
+  color-text-secondary,
+  color-error-text,
+  color-success-text,
+  color-warning-text,
+  color-info-text,
+  color-primary,
+  color-primary-hover,
+  color-primary-active,
+  color-bg-container,
+  color-fill,
+  color-fill-secondary,
+  color-fill-tertiary,
+  color-white,
+  color-success,
+  color-error,
+  color-error-bg,
+  color-fill-alter,
+  box-shadow,
+  color-bg-text-hover,
+  color-success-hover,
+  color-success-active,
+  color-primary-bg,
+  color-border
+);
+
+@each $class in (':root', '.-theme-with-dark-background') {
+  #{$class} {
+    @if ($class == '.-theme-with-dark-background') {
+      color-scheme: dark;
+    }
+    @if $class == ':root' {
+      @include theme-vars(
+        list.append(
+          $base-theme-vars,
+          (
+            color-primary-bg: color.adjust($color-primary, $lightness: 25%),
+            color-bg-container-darker:
+              color.adjust($color-bg-container, $lightness: -5%),
+            color-bg-container-lighter:
+              color.adjust($color-bg-container, $lightness: 5%),
+          )
+        ),
+        'light'
+      );
+    } @else {
+      @include theme-vars(
+        list.append(
+          $base-theme-vars,
+          (
+            color-primary-bg: color.adjust($color-primary, $lightness: -25%),
+            color-bg-container-darker:
+              color.adjust($color-bg-container-dark, $lightness: -5%),
+            color-bg-container-lighter:
+              color.adjust($color-bg-container-dark, $lightness: 5%),
+          )
+        ),
+        'dark'
+      );
+    }
+  }
+}
+
+@font-face {
+  font-family: 'MiSans';
+  src: url('./assets/MiSans-Regular.ttf');
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.platform-windows {
+  --luna-font-family: system-ui, 'Segoe UI', 'Microsoft YaHei UI', sans-serif !important;
+  @media (min-resolution: 1.5dppx) {
+    --luna-font-family: 'MiSans', system-ui, sans-serif !important;
+  }
+  button,
+  select,
+  input,
+  .cet-titlebar {
+    font-family: var(--luna-font-family) !important;
+  }
+}
+
+body {
+  &.platform-windows {
+    font-family: var(--luna-font-family) !important;
+  }
+  margin: 0;
+  overflow: hidden;
+  font-size: 14px;
+  background-color: var(--color-bg-container);
+  font-family: $font-family;
+  user-select: none;
+  color: var(--color-text);
+  cursor: default;
+}
+
+#app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background-clip: padding-box;
+  border: solid transparent;
+  border-width: 1px;
+}
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-fill);
+  transition: background-color 0.2s;
+  background-clip: padding-box;
+  border: solid transparent;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-primary);
+}
+
+.button {
+  border: none;
+  text-align: center;
+  padding: 6px;
+  border-radius: #{$border-radius-s-m}px;
+  background: var(--color-fill-tertiary);
+  &:hover {
+    background: var(--color-fill-secondary);
+  }
+  &.disabled {
+    pointer-events: none;
+  }
+  &.primary {
+    color: #fff;
+    background: var(--color-primary);
+    &:hover {
+      background: var(--color-primary-hover);
+    }
+    &:active {
+      background: var(--color-primary-active);
+    }
+  }
+  &.success {
+    color: #fff;
+    background: var(--color-success);
+    &:hover {
+      background: var(--color-success-hover);
+    }
+    &:active {
+      background: var(--color-success-active);
+    }
+  }
+}
+
+.modal-button {
+  margin-top: 20px;
+  width: 100%;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.hide-cet-menubar {
+  .cet-menubar {
+    display: none;
+  }
+}
+
+.toolbar-icon {
+  display: flex;
+  width: 16px;
+  align-items: center;
+  justify-content: center;
+  span {
+    padding: 2px;
+  }
+}
+
+.modal-setting-row {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.cet-titlebar {
+  .cet-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .cet-menubar {
+    .cet-menu-item-icon {
+      width: 0;
+    }
+    .cet-menubar-menu-button {
+      padding: 0;
+      .cet-menubar-menu-title {
+        padding: 0 8px;
+      }
+    }
+    .cet-menubar-menu-container {
+      border-radius: 0;
+      box-shadow: var(--box-shadow);
+    }
+    .cet-action-menu-item {
+      margin: 0;
+      border-radius: 0;
+    }
+  }
+}

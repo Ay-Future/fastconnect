@@ -1,0 +1,32 @@
+node_modules/
+dist/
+release/
+resources/
+.npm-cache/
+.gradle-home/
+outputs/
+
+.env
+.env.*
+!.env.example
+collector-data/
+yunxiao.config.json
+
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+.gradle/
+.idea/
+server/**/build/
+local.properties
+
+# Local backup of the original submodule metadata. The shared sources are
+# vendored into this repository so a clone contains the complete source tree.
+src/share/.git-upstream-history/
+src/renderer/icon/.git-upstream-history/
+
+build/*.provisionprofile

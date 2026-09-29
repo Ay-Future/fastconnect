@@ -1,0 +1,70 @@
+.logcat {
+  :global(.luna-logcat-entry) {
+    transition:
+      background-color 120ms ease,
+      box-shadow 120ms ease;
+  }
+}
+
+.tokenResult {
+  display: inline-flex;
+  min-width: 0;
+  max-width: 420px;
+  align-items: center;
+  gap: 7px;
+  height: 28px;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  padding: 0 8px;
+  background: var(--color-bg-container);
+  color: var(--color-text-weak);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+
+.tokenResult:hover {
+  border-color: var(--color-primary);
+}
+
+.tokenResult span,
+.tokenResult b {
+  flex: 0 0 auto;
+  font-weight: 500;
+}
+
+.tokenResult code {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text);
+  font: 12px/1 Consolas, monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tokenResult b {
+  color: var(--color-primary);
+}
+
+.searchMatchedRow {
+  background: rgba(255, 236, 153, 0.28);
+}
+
+.searchActiveRow {
+  background: rgba(255, 214, 102, 0.38);
+  box-shadow: inset 3px 0 0 #fa8c16;
+}
+
+.searchMatchedText {
+  background: #ffe58f;
+  color: #612500;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.searchActiveText {
+  background: #fa541c;
+  color: #fff7e6;
+  border-radius: 3px;
+  padding: 0 2px;
+}

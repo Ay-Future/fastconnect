@@ -251,22 +251,39 @@ export default observer(function TestSession() {
   }
 
   function applyDraftDefaults(nextDraft: IDraft, nextOptions: IOptions | null): IDraft {
-    if (!nextOptions) return nextDraft
+    // Captures created before these fields were added do not have the arrays.
+    // Normalize them at the boundary so older local evidence remains editable.
+    const participantIds = Array.isArray(nextDraft.participantIds)
+      ? nextDraft.participantIds
+      : []
+    const participants = Array.isArray(nextDraft.participants)
+      ? nextDraft.participants
+      : []
+    const reproductionSteps = Array.isArray(nextDraft.reproductionSteps)
+      ? nextDraft.reproductionSteps
+      : []
+    const normalizedDraft = {
+      ...nextDraft,
+      participantIds,
+      participants,
+      reproductionSteps,
+    }
+    if (!nextOptions) return normalizedDraft
     const defaultApplication = nextOptions.applications.find((item) => item.name === '数学一对一')
     const defaultVerifier = nextOptions.verifiers.find((item) => item.name === '陈锦东')
-    const defaultParticipantIds = nextDraft.participantIds.length
-      ? nextDraft.participantIds
+    const defaultParticipantIds = participantIds.length
+      ? participantIds
       : nextOptions.participants.filter((item) => item.name === '陈锦东').slice(0, 1).map((item) => item.id)
     const participantPeople = nextOptions.participants.filter((item) => defaultParticipantIds.includes(item.id))
     const verifierId = nextDraft.verifierId || defaultVerifier?.id || ''
     const verifier = nextOptions.verifiers.find((item) => item.id === verifierId)
     return {
-      ...nextDraft,
-      application: nextDraft.application || defaultApplication?.id || '',
+      ...normalizedDraft,
+      application: normalizedDraft.application || defaultApplication?.id || '',
       verifierId,
-      verifier: verifier?.name || nextDraft.verifier || '',
+      verifier: verifier?.name || normalizedDraft.verifier || '',
       participantIds: defaultParticipantIds,
-      participants: participantPeople.length ? participantPeople.map((item) => item.name) : nextDraft.participants,
+      participants: participantPeople.length ? participantPeople.map((item) => item.name) : participants,
     }
   }
 
